@@ -1,0 +1,22 @@
+services:
+  drawio:
+    image: jgraph/drawio:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - DRAWIO_SELF_CONTAINED=1
+      - EXPORT_URL=http://drawio-export:8000/
+    depends_on:
+      - drawio-export
+    restart: always
+
+  drawio-export:
+    image: sig9/export-server:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - LANG=ja_JP.UTF-8
+    volumes:
+      - ./fonts:/usr/share/fonts/truetype/custom:ro
+    restart: always

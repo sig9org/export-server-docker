@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task --list
+
+  build:
+    aliases: [b]
+    desc: Build and export to the registry
+    cmds:
+      - docker buildx build --platform linux/amd64,linux/arm64 --output=type=registry --tag sig9/export-server:latest .
+
+  list-tags:
+    aliases: [l]
+    desc: List the tags registered on Docker Hub
+    cmds:
+      - skopeo list-tags docker://docker.io/sig9/export-server | jq -r '.Tags[]' | sort -V
