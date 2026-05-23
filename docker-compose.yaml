@@ -8,7 +8,7 @@ services:
       - EXPORT_URL=http://drawio-export:8000/
     depends_on:
       - drawio-export
-    restart: always
+    restart: unless-stopped
 
   drawio-export:
     image: sig9/export-server:latest
@@ -19,4 +19,4 @@ services:
       - LANG=ja_JP.UTF-8
     volumes:
       - ./fonts:/usr/share/fonts/truetype/custom:ro
-    restart: always
+    restart: unless-stopped
