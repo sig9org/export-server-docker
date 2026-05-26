@@ -2,6 +2,9 @@
 
 version: "3"
 
+vars:
+  NAME: "flowise"
+
 tasks:
   default:
     cmds:
@@ -11,13 +14,7 @@ tasks:
     aliases: [b]
     desc: Build and export to the registry
     cmds:
-      - docker buildx build --platform linux/amd64,linux/arm64 --output=type=registry --tag sig9/export-server:latest .
-
-  list-tags:
-    aliases: [l]
-    desc: List the tags registered on Docker Hub
-    cmds:
-      - skopeo list-tags docker://docker.io/sig9/export-server | jq -r '.Tags[]' | sort -V
+      - docker buildx build --platform linux/amd64,linux/arm64 --output=type=registry --tag sig9/{{.NAME}}:latest .
 
   # Common Docker Operations
 
@@ -40,6 +37,16 @@ tasks:
     desc: docker compose ps -a
     cmds:
       - docker compose ps -a
+
+  shell:
+    desc: docker exec -it {{.NAME}} sh
+    cmds:
+      - docker exec -it {{.NAME}} sh
+
+  tags:
+    desc: List the tags registered on Docker Hub
+    cmds:
+      - skopeo list-tags docker://docker.io/sig9/{{.NAME}} | jq -r '.Tags[]' | sort -V
 
   up:
     desc: docker compose up -d
